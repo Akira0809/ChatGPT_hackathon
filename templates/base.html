@@ -4,7 +4,16 @@
         <meta charset="UTF-8">
         <title>ゲーム画面</title>
     </head>
-    <body>
-        hello world
+    <body class="main">
+        {% block content %}
+        <p>{{ text }}</p>
+        <button>True</button>
+        <button>False</button>
+        <style>
+            .main {
+                text-align: center;
+            }
+        </style>
+        {% endblock %}
     </body>
 </html>

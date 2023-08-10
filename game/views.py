@@ -1,8 +1,13 @@
 from django.shortcuts import render
+from .models import Data
 import openai
 
 # Create your views here.
 def game(request):
+    
+    return render(request, "base.html", context={"text": text})
+
+def difficulty(request):
     with open("../api.text", "r") as f:
         openai.api_key = f.read().strip()
 
@@ -13,4 +18,4 @@ def game(request):
         ]
     )
     text = response.choices[0]["message"]["content"].strip()
-    return render(request, "base.html", context={"text": text})
+    Data.objects.create(text)

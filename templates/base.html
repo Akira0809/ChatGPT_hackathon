@@ -7,11 +7,6 @@
     <body class="main">
         {% csrf_token %}
         {% block content %}
-        <form method="post">
-            <button type="submit" name="selected_button" value="elementary_school">[小学生]</button>
-            <button type="submit" name="selected_button" value="high_school">[高校生]</button>
-            <button type="submit" name="selected_button" value="society">[社会人]</button>
-        </form>
         <p>{{ text }}</p>
         <button>True</button>
         <button>False</button>

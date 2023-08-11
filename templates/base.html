@@ -5,13 +5,42 @@
         <title>ゲーム画面</title>
     </head>
     <body class="main">
-        {% csrf_token %}
         {% block content %}
-        <p>{{ text }}</p>
-        <button>True</button>
-        <button>False</button>
+        {% csrf_token %}
+        <p id="question"></p>
+        <button onclick="judge('T')">True</button>
+        <button onclick="judge('F')">False</button>
         <br>
-        <a href="{% url 'game' %}">次へ</a>
+        <p id="result"></p>
+        <p id="commentary"></p>
+        <button onclick="next()">次へ</button>
+        <script>
+            var index = 0;
+
+            window.onload = function setup() {
+                const data = JSON.parse("{{ data }}");
+                document.getElementById("question").textContent = data[index]["question"];
+            }
+
+            function judge(button_value) {
+                const data = JSON.parse("{{ data }}");
+                if (document.getElementById("question").value == data[index]["question"]){
+                    if (data[index]["answer"] == button_value){
+                        document.getElementById("result").textContent = "正解";
+                        document.getElementById("commentary").textContent = data[i]["commentary"];
+                    }
+                    else {
+                        document.getElementById("result").textContent = "不正解";
+                        document.getElementById("commentary").textContent = data[i]["commentary"];
+                    }
+                }
+            }
+
+            function next() {
+                index++;
+                window.location.reload();
+            }
+        </script>
         <style>
             .main {
                 text-align: center;

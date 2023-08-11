@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>難易度選択画面</title>
+    </head>
+    <body>
+        {% block content %}
+        <h1>難易度を選択してください</h1>
+        {% csrf_token %}
+        <form method="post">
+            <button type="submit" name="selected_button" value="elementary_school">[小学生]</button>
+            <button type="submit" name="selected_button" value="high_school">[高校生]</button>
+            <button type="submit" name="selected_button" value="society">[社会人]</button>
+        </form>
+        {% endblock %}
+    </body>
+</html>

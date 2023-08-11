@@ -5,10 +5,13 @@
         <title>ゲーム画面</title>
     </head>
     <body class="main">
+        {% csrf_token %}
         {% block content %}
         <p>{{ text }}</p>
         <button>True</button>
         <button>False</button>
+        <br>
+        <a href="{% url 'game' %}">次へ</a>
         <style>
             .main {
                 text-align: center;

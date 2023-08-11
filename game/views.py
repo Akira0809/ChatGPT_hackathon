@@ -17,6 +17,16 @@ def game(request):
     return render(request, "base.html")
 
 def difficulty(request):
+    if request.method == "POST":
+        selected_button = request.POST.get("selected_button")
+        if selected_button == "elementary_school":
+            difficulty_text = "・問題の難易度は小学校卒業レベルとする"
+        elif selected_button == "high_school":
+            difficulty_text = "・問題の難易度は高校卒業レベルとする"
+        elif selected_button == "society":
+            difficulty_text = "・問題の難易度は社会人レベルとする"
+        else:
+            difficulty_text = ""
     data = Data.objects.all()
     with open("../api.text", "r") as f:
         openai.api_key = f.read().strip()
@@ -26,6 +36,7 @@ def difficulty(request):
         messages=[
             {"role": "user", "content": """
                 以下の条件で文章を生成してください
+                {difficulty_text}
                 ・VOCALOIDに関する文章。
                 ・出力する文章の数は5つ。その5つのうち、4つは本当のことしか書かれていない文章にする。残りの1つは嘘の情報が混じった文章にする。嘘の文章の個数と本当の文章の個数を変えてはならない。もしこの個数を守らなかった場合は重い罰が下る。
                 ・文章は疑問形で終わってはならない。

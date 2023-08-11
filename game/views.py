@@ -14,7 +14,7 @@ def game(request):
         answer.append(data[i]["answer"])
         hints.append(data[i]["hints"])
         commentary.append(data[i]["commentary"])
-    return render(request, "base.html", context={"text": text})
+    return render(request, "base.html")
 
 def difficulty(request):
     data = Data.objects.all()

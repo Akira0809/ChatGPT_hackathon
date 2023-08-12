@@ -13,9 +13,11 @@
         <br>
         <p id="result"></p>
         <p id="commentary"></p>
+        <p id="points">現在のポイント: 0</p>
         <button onclick="next()">次へ</button>
         <script>
             var index = 0;
+            var points = 0;
 
             window.onload = function setup() {
                 const data = JSON.parse("{{ data }}");
@@ -28,11 +30,13 @@
                     if (data[index]["answer"] == button_value){
                         document.getElementById("result").textContent = "正解";
                         document.getElementById("commentary").textContent = data[i]["commentary"];
+                        points += 10;
                     }
                     else {
                         document.getElementById("result").textContent = "不正解";
                         document.getElementById("commentary").textContent = data[i]["commentary"];
                     }
+                    document.getElementById("points").textContent = "現在のポイント: " + points;
                 }
             }
 

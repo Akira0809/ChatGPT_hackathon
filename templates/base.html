@@ -43,7 +43,12 @@
 
             function next() {
                 index++;
-                window.location.reload();
+                const data = JSON.parse("{{ data|escapejs }}");
+                if (index < 5){
+                    document.getElementById("question").textContent = data[index]["question"];
+                    document.getElementById("result").textContent = "";
+                    document.getElementById("commentary").textContent = "";
+                }
             }
         </script>
         <style>

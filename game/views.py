@@ -4,6 +4,7 @@ import json
 
 # Create your views here.
 def game(request):
-    data= Data.objects.order_by("-created_at").filter()
+    data= Data.objects.get(id=19)
     data = json.loads(data)
+    print(data)
     return render(request, "base.html", context={"data": data})

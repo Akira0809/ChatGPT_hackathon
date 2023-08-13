@@ -1,5 +1,5 @@
 from django.shortcuts import render
 
 def result(request):
-    point = 1
+    point = request.GET.get("point", "")
     return render(request, "result.html", context={"point": point})

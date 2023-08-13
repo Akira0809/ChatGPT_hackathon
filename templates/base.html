@@ -18,15 +18,13 @@
         <script>
             var index = 0;
             var points = 0;
+            const data = JSON.parse("{{ data|escapejs }}");
 
             window.onload = function setup() {
-                const data = JSON.parse("{{ data|escapejs }}");
-                console.log(data);
                 document.getElementById("question").textContent = data[index]["question"];
             }
 
             function judge(button_value) {
-                const data = JSON.parse("{{ data|escapejs }}");
                 if (document.getElementById("question").textContent == data[index]["question"]){
                     if (data[index]["answer"] == button_value){
                         document.getElementById("result").textContent = "正解";
@@ -43,11 +41,13 @@
 
             function next() {
                 index++;
-                const data = JSON.parse("{{ data|escapejs }}");
                 if (index < 5){
                     document.getElementById("question").textContent = data[index]["question"];
                     document.getElementById("result").textContent = "";
                     document.getElementById("commentary").textContent = "";
+                }
+                else {
+                    window.location.href = "/result";
                 }
             }
         </script>

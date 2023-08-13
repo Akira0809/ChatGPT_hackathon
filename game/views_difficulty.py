@@ -44,7 +44,7 @@ def difficulty(request):
                 "question": "湖の水は飲用に適している。",
                 "answer": "T",
                 "hints": ["湖", "水", "飲用"],
-                "commentary": "湖の水は地下水と比べると塩分濃度が低く、浄化処理なしでも直接飲むことができる場合があります。ただし、湖の水は汚染物質の影響も受けるため、安全な飲用水として利用するには水質の管理が重要です。"   
+                "commentary": "湖の水は地下水と比べると塩分濃度が低く、浄化処理なしでも直接飲むことができる場合があります。ただし、湖の水は汚染物質の影響も受けるため、安全な飲用水として利用するには水質の管理が重要です。"
             },
             {
                 "question": "湖は必ずしも自然の地形によって形成されるわけではない。",
@@ -85,5 +85,5 @@ def difficulty(request):
         Data.objects.create(questions=text)
         print(text)
         return render(request, "base.html", context={"data": text})
-    
+
     return render(request, "difficulty.html")

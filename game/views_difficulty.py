@@ -5,16 +5,27 @@ import json
 
 # Create your views here.
 def difficulty(request):
+    error_text = "入力漏れがあります。2つとも選択してください。"
     if request.method == "POST":
-        selected_button = request.POST.get("selected_button")
-        if selected_button == "elementary_school":
-            difficulty_text = "・問題の難易度は小学校卒業レベルとする"
-        elif selected_button == "high_school":
-            difficulty_text = "・問題の難易度は高校卒業レベルとする"
-        elif selected_button == "society":
-            difficulty_text = "・問題の難易度は社会人レベルとする"
+        selected_difficulty = request.POST.get("selected_difficulty")
+        if selected_difficulty == "elementary_school":
+            difficulty_text = "小学校卒業"
+        elif selected_difficulty == "high_school":
+            difficulty_text = "・高校卒業"
+        elif selected_difficulty == "society":
+            difficulty_text = "社会人レベル"
         else:
-            difficulty_text = ""
+            return render(request, "difficulty.html", {'error_text': error_text})
+
+        selected_genre = request.POST.get("selected_genre")
+        if selected_genre == "miscellaneous":
+            genre_text = "雑学"
+        elif selected_genre == "history":
+            genre_text = "歴史"
+        elif selected_genre == "it":
+            genre_text = "IT"
+        else:
+            return render(request, "difficulty.html", {'error_text': error_text})
 
         data = Data.objects.get(id=1)
 
@@ -56,8 +67,8 @@ def difficulty(request):
 
         prompt = """
         以下の条件で文章を生成してください
-        {difficulty}
-        ・湖に関する文章。
+        ・問題の難易度は{difficulty}レベルとする。
+        ・{genre}に関する文章。
         ・出力する文章の数は5つ。その5つの文章は、本当のことしか書かれていない文章と嘘の情報が混じった文章で構成される。5つの文章の中でいくつ嘘の文章を混ぜるかは、0から5の範囲内でランダムに決める。
         ・文章は疑問形で終わってはならない。
         ・学習データにないなどの理由で文章の正確性が保証できない場合、その文章の生成をやり直す。
@@ -79,7 +90,7 @@ def difficulty(request):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "user", "content": prompt.format(difficulty=difficulty_text, template=template)},
+                {"role": "user", "content": prompt.format(difficulty=difficulty_text, genre=genre_text, template=template)},
             ]
         )
         text = response.choices[0]["message"]["content"].strip()

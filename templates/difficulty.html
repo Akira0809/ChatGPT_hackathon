@@ -15,11 +15,34 @@
         <div class="d-flex justify-content-center align-items-center">
             <div id="difficulty-select">
                 <h1>難易度を選択してください</h1>
-                <form method="post" id="loading-form">
+                <form method="POST" id="loading-form">
                     {% csrf_token %}
-                    <button type="submit" name="selected_button" value="elementary_school" class="btn btn-primary loading-button">小学生</button>
-                    <button type="submit" name="selected_button" value="high_school" class="btn btn-primary loading-button">高校生</button>
-                    <button type="submit" name="selected_button" value="society" class="btn btn-primary loading-button">社会人</button>
+                    <div class="form-group">
+                        <label class="mr-3">
+                            <input type="radio" name="selected_difficulty" value="elementary_school"> 小学生
+                        </label>
+                        <label class="mr-3">
+                            <input type="radio" name="selected_difficulty" value="high_school"> 高校生
+                        </label>
+                        <label class="mr-3">
+                            <input type="radio" name="selected_difficulty" value="society"> 社会人
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="mr-3">
+                            <input type="radio" name="selected_genre" value="miscellaneous"> 雑学
+                        </label>
+                        <label class="mr-3">
+                            <input type="radio" name="selected_genre" value="history"> 歴史
+                        </label>
+                        <label class="mr-3">
+                            <input type="radio" name="selected_genre" value="it"> IT
+                        </label>
+                    </div>
+                    {% if error_text %}
+                        <p>{{ error_text }}</p>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">Start!</button>
                 </form>
             </div>
             <!-- ローディングのアニメーション -->

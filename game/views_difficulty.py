@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from .models import Data
 import openai
-import json
 
 # Create your views here.
 def difficulty(request):
@@ -16,41 +15,41 @@ def difficulty(request):
         else:
             difficulty_text = ""
 
-        data = Data.objects.get(id=1)
+        data = Data.objects.latest("id")
 
         with open("../api.text", "r") as f:
             openai.api_key = f.read().strip()
 
         template = [
             {
-                "question": "湖の水は常に透明である。",
-                "answer": "F",
-                "hints": ["水", "透明", "湖"],
-                "commentary": "湖の水は透明ではなく、様々な要因によって色や濁りが生じることがあります。湖の水が透明であれば、水中の魚や植物などが視認しやすくなるでしょう。"
+                "question": "文章",
+                "answer": "嘘か本当かを表す英文字",
+                "hints": ["ワード1", "ワード2", "ワード3"],
+                "commentary": "解説"
             },
             {
-                "question": "湖に住んでいる魚は全て淡水魚である。",
-                "answer": "T",
-                "hints": ["湖", "魚", "淡水"],
-                "commentary": "湖は陸地からの水の流入や雨水などによって水が供給され、その水が淡水であることが一般的です。そのため、湖に住む魚も淡水魚が主な生息魚種となります。"
+                "question": "文章",
+                "answer": "嘘か本当かを表す英文字",
+                "hints": ["ワード1", "ワード2", "ワード3"],
+                "commentary": "解説"
             },
             {
-                "question": "湖の水は常に同じ場所にある。",
-                "answer": "F",
-                "hints": ["水", "湖", "場所"],
-                "commentary": "湖の水は循環をしており、降水や河川などの水源から流入し、蒸発や地下への浸透、河川などへの流出などを経て、常に動いています。そのため、湖の水は常に同じ場所にあるわけではありません。"
+                "question": "文章",
+                "answer": "嘘か本当かを表す英文字",
+                "hints": ["ワード1", "ワード2", "ワード3"],
+                "commentary": "解説"
             },
             {
-                "question": "湖の水は飲用に適している。",
-                "answer": "T",
-                "hints": ["湖", "水", "飲用"],
-                "commentary": "湖の水は地下水と比べると塩分濃度が低く、浄化処理なしでも直接飲むことができる場合があります。ただし、湖の水は汚染物質の影響も受けるため、安全な飲用水として利用するには水質の管理が重要です。"
+                "question": "文章",
+                "answer": "嘘か本当かを表す英文字",
+                "hints": ["ワード1", "ワード2", "ワード3"],
+                "commentary": "解説"
             },
             {
-                "question": "湖は必ずしも自然の地形によって形成されるわけではない。",
-                "answer": "T",
-                "hints": ["湖", "地形", "形成"],
-                "commentary": "湖は地球上の様々な要因によって形成される場合があります。例えば、火山活動によってできるカルデラ湖や人工的に作られる人工湖などがあります。そのため、湖は必ずしも自然の地形によって形成されるわけではありません。"
+                "question": "文章",
+                "answer": "嘘か本当かを表す英文字",
+                "hints": ["ワード1", "ワード2", "ワード3"],
+                "commentary": "解説"
             }
         ]
 
@@ -68,9 +67,9 @@ def difficulty(request):
         ・３つのワードのあとに文章に関する解説を生成する。解説は具体例などを交えて読む人がわかりやすいように記述すること。決して生成した文章とほぼ同じ文章を出力するといったことがあってはならない。また、解説は事実のみを説明するように生成すること。
         ・出力はプログラムで使用する。その際に邪魔になるので、「了解しました」「分かりました」といったメッセージは不要である。もしも出力内容以外の不要なメッセージを出力した場合、重い罰が下る
         ・生成した文章はjson形式で出力する。それぞれの文章の出力の例は以下に示すとおりである。以下の通りにフォーマットを整え、jsonで出力すること。出力はプログラムで使用するため、下記に指定するフォーマットの形式以外だとエラーの原因となる。
-        ・生成した文章はダブルクォーテーションで囲むことそうでないとエラーが発生し実行することができない。
         {template}
         ・以下のjsonは直近で出力した内容である。これに類似したものは出力してはならない。
+        {data}
         ・出力を行う前に、文章の内容を精査し、さらに文章と解説を比較して矛盾点がないか確認すること。もし本当の文章の中に嘘が混じっている場合か嘘の文章に嘘が混じっていない場合、文章の生成からやり直す。また、解説には絶対に誤りが含まれていてはならないため、さらに精査すること。この工程を怠り文章や解説に誤りがあった場合、とても重い罰が下る
         ・出力を行う前に、jsonの内容を確認する。文章、本当か嘘かを表す英文字、3つのワード、解説のうち、いずれかが欠けていた場合はとても重い罰が下る。特にワードの数が3つぴったりであることは重大である
         上記の決まりに反すると、無差別に選ばれたなんの罪もない人が1000人死にます。
@@ -79,13 +78,12 @@ def difficulty(request):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "user", "content": prompt.format(difficulty=difficulty_text, template=template)},
+                {"role": "user", "content": prompt.format(difficulty=difficulty_text, template=template, data=data.questions)},
             ]
         )
         text = response.choices[0]["message"]["content"].strip()
         text = text.replace("'", '"')
         Data.objects.create(questions=text)
-        print(text)
         return render(request, "base.html", context={"data": text})
 
     return render(request, "difficulty.html")

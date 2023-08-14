@@ -8,35 +8,51 @@
     </head>
     <body class="main">
         {% block content %}
-        <h2>あなたの得点は</h2>
-        <h1>{{ point }}</h1>
-        <p id="comment"></p>
+        <div class="card text-center d-flex flex-column justify-content-center" style="height: 100vh;">
+            <div class="card-header">
+                <h2>あなたの得点は...</h2>
+            </div>
+            <div class="card-body">
+                <img id="Rabbit_Image" src="" alt="Rabbit Image" width="200" height="200">
+                <h1 class="card-title">{{ point }}点！</h1>
+                <p class="card-text" id="comment"></p>
+                <a href="/difficulty" class="btn btn-primary">もう一度プレイする</a>
+            </div>
+        </div>
         {% endblock %}
         <script>
             const point = "{{ point }}";
             let text;
+            let imageUrl;
             if (point == 0){
                 text = "あらら、５問中０問しか正解できなかったんですね。まさか、嘘をつくことに関してはChatGPTにはかなわないということでしょうか？でも大丈夫、誰でも最初は慣れないことがありますよ。次回はもっと頑張ってみましょう！ChatGPTのトリッキーなところを理解するのは少し難しいかもしれませんが、練習あるのみですよ。がんばってください！";
+                imageUrl = "https://1.bp.blogspot.com/-TA2-dP9Dg_4/U0pS-89OhzI/AAAAAAAAfBE/U_BkMYrPIF0/s800/stamp_english5.png";
             }
             else if (point == 10){
                 text = "まあまあ、５問中１問正解は……まあ、いいんじゃない？運が悪かったってことだろうし、次回に期待しよう！でも、もしかしたらChatGPTが嘘をつくのを見破うって結構難しいかもしれないね。ちょっと練習が必要かもしれないけど、がんばってみて！頑張ればきっと成績が上がるはずだよ。";
+                imageUrl = "https://1.bp.blogspot.com/-TA2-dP9Dg_4/U0pS-89OhzI/AAAAAAAAfBE/U_BkMYrPIF0/s800/stamp_english5.png";
             }
             else if (point == 20){
                 text = "まあまあ、２問正解は悪くないじゃないですか？でも、ちょっと物足りないかもしれませんね。もしかしたら、もっと深く考える必要があったかもしれませんよ。次回にはもっと頑張ってみてください！嘘を見破るトリックやヒントを学んで、スコアをアップさせましょう。あなたの頭脳戦に期待してます！";
+                imageUrl = "https://1.bp.blogspot.com/-XtiBxMjeua0/U0pS-7E5ZKI/AAAAAAAAfA4/HBja1KaJuPI/s800/stamp_english4.png";
             }
             else if (point == 30){
                 text = "あらあら、お疲れ様でしたね。ちょっと難しかったんですか？でも３問正解なんて、まだまだチャンスはあるってことですよ！頑張って勉強して、次回は５問中５問正解目指しましょう！嘘を見破る力って、少しずつ鍛えていくものですから、焦らずコツコツやっていきましょうね。それにしても、もしかして私も嘘をついているかしら？冗談ですよ、信じていいですよ、きっと（笑）。";
+                imageUrl = "https://3.bp.blogspot.com/-QVpIq0pGhBM/U0pS-WLip7I/AAAAAAAAfAs/eB1pYsjYkeE/s800/stamp_english3.png";
             }
             else if (point == 40){
                 text = "たった4問正解？まさか、そんなに知識が乏しいとは驚きだよ。でも諦めるのは早いよ。次回に向けてしっかり勉強して、5問中5問正解を目指してみてはどうだ？頑張れ！";
+                imageUrl = "https://1.bp.blogspot.com/-whlKYIbOPPA/U3LCFrG5lHI/AAAAAAAAgks/PGAjXiqDnYU/s800/stamp_english2.png";
             }
             else if (point == 50){
                 text = "素晴らしい！あなたがChatGPTの嘘を見破る問題で全問正解したことに驚かされます。情報を正しく評価し、精査する能力は重要ですし、深い洞察力を示していることでしょう。これは情報を扱う上で非常に役立つスキルです。将来もさまざまな状況で活用できることでしょう。おめでとうございます！";
+                imageUrl = "https://4.bp.blogspot.com/-DuFH2NuIPoo/U3LCFoA-GkI/AAAAAAAAgkk/SkB43lWFJnc/s800/stamp_english1.png";
             }
             else {
                 text = "あなたが嘘をついたり、ずるをしたりすることは、信頼性を失う原因となります。信頼は人間関係やコミュニケーションの基盤です。嘘をつくことは他人を欺いたり、誤解を招いたりする可能性があります。それが明るみに出れば、信用を失うことにつながるかもしれません。誠実さと正直さは尊重されるべき価値です。誤解を招かないように情報を提供し、他人とのコミュニケーションで信頼を築く努力をすることが大切です。もし嘘をついたりずるをしたりすることが認められるならば、その行動を省みて、今後は正直なコミュニケーションと誠実な態度を持つことを心がけることが望ましいでしょう。";
             }
             document.getElementById("comment").textContent = text;
+            document.getElementById("Rabbit_Image").querySelector("img").src = imageUrl;
         </script>
         <style>
             .main {

@@ -83,6 +83,8 @@
                     document.getElementById("question").textContent = data[index]["question"];
                     document.getElementById("result").textContent = "";
                     document.getElementById("commentary").textContent = "";
+                    document.getElementById("judge").textContent = "";
+                    document.getElementById("objection").textContent = "";
                 }
                 else {
                     window.location.href = `/result/?point=${points}`;
@@ -98,6 +100,7 @@
                 const modelName = "gpt-3.5-turbo";
                 const text = data[index]["question"];
                 const API = "{{ API }}";
+                let response;
                 const prompt =
                 `
                 以下の文章が正しいか誤っているかを判定してください。
@@ -134,14 +137,16 @@
                 fetch(myRequest)
                     .then(res => res.json())
                     .then(json => {
-                        console.log(json.choices[0].message.content);
+                        response = JSON.parse(json.choices[0].message.content);
+                        if (response["judge"] == "T"){
+                            document.getElementById("judge").textContent = "正解";
+                            document.getElementById("objection").textContent = response["commentary"];
+                        }
+                        else {
+                            document.getElementById("judge").textContent = "不正解";
+                            document.getElementById("objection").textContent = response["commentary"];
+                        }
                     })
-                .catch(err => {
-                    console.log("error");
-                });
-
-                if ()
-                document.getElementById("objection").textContent = text;
             }
         </script>
         <style>

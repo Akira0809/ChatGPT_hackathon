@@ -8,9 +8,14 @@
         {% block content %}
         {% csrf_token %}
         <p id="question"></p>
-        <button onclick="judge('T')">True</button>
-        <button onclick="judge('F')">False</button>
-        <br>
+        <div id="hint_button">
+            <button onclick="hint()">ヒント</button>
+        </div>
+        <p id="hint_text"></p>
+        <div id="judge_button">
+            <button onclick="judge('T')">True</button>
+            <button onclick="judge('F')">False</button>
+        </div>
         <p id="result"></p>
         <p id="commentary"></p>
         <p id="points">現在のポイント: 0</p>
@@ -18,13 +23,26 @@
         <script>
             var index = 0;
             var points = 0;
+            // hintボタンを押さなくても発生してしまう無駄な処理を防ぐため
+            var hint_click = false;
             const data = JSON.parse("{{ data|escapejs }}");
 
             window.onload = function setup() {
                 document.getElementById("question").textContent = data[index]["question"];
             }
 
+            function hint() {
+                hint_click = true;
+                document.getElementById("hint_button").style.display = "none";
+                if (document.getElementById("question").textContent == data[index]["question"]){
+                    document.getElementById("hint_text").textContent = data[index]["hints"];
+                } else {
+                    document.getElementById("hint_text").textContent = "ヒントはありません";
+                }
+            }
+
             function judge(button_value) {
+                document.getElementById("judge_button").style.display = "none";
                 if (document.getElementById("question").textContent == data[index]["question"]){
                     if (data[index]["answer"] == button_value){
                         document.getElementById("result").textContent = "正解";
@@ -41,6 +59,12 @@
 
             function next() {
                 index++;
+                document.getElementById("judge_button").style.display = "block";
+                if (hint_click) {
+                    document.getElementById("hint_button").style.display = "block";
+                    document.getElementById("hint_text").textContent = "";
+                    hint_click = false;
+                }
                 if (index < 5){
                     document.getElementById("question").textContent = data[index]["question"];
                     document.getElementById("result").textContent = "";

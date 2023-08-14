@@ -4,10 +4,15 @@
         <meta charset="UTF-8">
         <title>結果発表</title>
     </head>
-    <body>
+    <body class="main">
         {% block content %}
         <h2>あなたの得点は</h2>
         <h1>{{ point }}</h1>
         {% endblock %}
+        <style>
+            .main {
+                text-align: center;
+            }
+        </style>
     </body>
 </html>

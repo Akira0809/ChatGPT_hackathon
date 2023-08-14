@@ -26,10 +26,46 @@ def difficulty(request):
         else:
             return render(request, "difficulty.html", {'error_text': error_text})
 
-        data = Data.objects.latest("id")
+        #data = Data.objects.latest("id")
 
-        with open("../api.text", "r") as f:
+        data = [
+            {
+                "question": "太陽系の中で最も大きな惑星は木星であり、その巨大なガスの雲を持つ姿は一見すると星座のように見えます。",
+                "answer": "F",
+                "hints": ["太陽系", "最も大きな惑星", "木星"],
+                "commentary": "太陽系の中で最も大きな惑星は木星ですが、その巨大なガスの雲を持つ姿が星座のように見えることはありません。木星はガス巨星であり、その大きなガスの雲が特徴ですが、星座のように見えるわけではありません。"
+            },
+            {
+                "question": "宇宙空間は真空であるため、音の伝わる媒体が存在せず、宇宙では音を聞くことはできません。",
+                "answer": "T",
+                "hints": ["宇宙空間", "真空", "音の伝わる媒体"],
+                "commentary": "宇宙空間はほとんどが真空であり、音の伝わる媒体が存在しません。そのため、宇宙では通常の音を聞くことはできません。宇宙船などの内部では空気などの媒体を使って音が伝わることがありますが、宇宙空間自体では音は聞こえません。"
+            },
+            {
+                "question": "宇宙には一定の境界線が存在し、この境界線を超えることは物理的に不可能です。",
+                "answer": "F",
+                "hints": ["宇宙", "境界線", "物理的に不可能"],
+                "commentary": "宇宙には特定の物理的な境界線は存在せず、理論的には宇宙は無限に広がっていると考えられています。現在の科学的な知識では、宇宙に明確な境界はないとされています。"
+            },
+            {
+                "question": "月は地球から見ると常に同じ面を向けており、裏側の姿を観察することはできません。",
+                "answer": "F",
+                "hints": ["月", "地球から見る", "同じ面"],
+                "commentary": "月は地球から見ると常に同じ面を向けている現象を「潮汐固定」と呼びますが、裏側の姿を観察することも可能です。宇宙船などを利用して月の裏側にもアクセスすることができ、その地形や特徴を観察することが行われています。"
+            },
+            {
+                "question": "宇宙飛行士は長期間宇宙ステーションに滞在する際、重力の影響で身長が少しずつ縮んでしまうことがあるため、ステーション内で特別なトレーニングを行います。",
+                "answer": "T",
+                "hints": ["宇宙飛行士", "宇宙ステーション", "トレーニング"],
+                "commentary": "宇宙ステーションでは重力が微弱なため、宇宙飛行士の身体は長期間滞在するうちに微妙に変化します。宇宙ステーション内でのトレーニングは、骨密度や筋力の維持などを支援するために行われています。"
+            }
+        ]
+
+        with open("../api.text") as f:
             openai.api_key = f.read().strip()
+
+        with open("../api_js.text") as f:
+            API = f.read().strip()
 
         template = [
             {
@@ -89,12 +125,13 @@ def difficulty(request):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "user", "content": prompt.format(difficulty=difficulty_text, genre=genre_text, template=template, data=data.questions)},
+                {"role": "user", "content": prompt.format(difficulty=difficulty_text, genre=genre_text, template=template, data=data)},
             ]
         )
         text = response.choices[0]["message"]["content"].strip()
         text = text.replace("'", '"')
+        print(text)
         Data.objects.create(questions=text)
-        return render(request, "base.html", context={"data": text})
+        return render(request, "base.html", context={"data": text, "API": API})
 
     return render(request, "difficulty.html")

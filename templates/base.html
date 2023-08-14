@@ -16,7 +16,10 @@
         <p id="result"></p>
         <p id="commentary"></p>
         <p id="points">現在のポイント: 0</p>
+        <button onclick="objection()">異議あり！</button>
         <button onclick="next()">次へ</button>
+        <p id="judge"></p>
+        <p id="objection"></p>
         <script>
             var index = 0;
             var points = 0;
@@ -56,6 +59,57 @@
 
             function hint() {
                 document.getElementById("hints").textContent = data[index]["hints"];
+            }
+
+            function objection() {
+                const endPoint = "https://api.openai.com/v1/chat/completions";
+                const modelName = "gpt-3.5-turbo";
+                const text = data[index]["question"];
+                const API = "{{ API }}";
+                const prompt = 
+                `
+                以下の文章が正しいか誤っているかを判定してください。
+                ${text}
+                判定は正しいときはT、誤っているときはFと出力してください。
+                また、その理由もJson形式で出力してください。
+
+                出力例
+                {
+                    "judge": "正誤を表す英文字",
+                    "commentary": "解説"
+                }
+                `;
+
+                const messages=[
+                    {"role": "user", "content": prompt},
+                ];
+
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${API}`
+                    },
+                    body: JSON.stringify({
+                        model: modelName,
+                        messages: messages,
+                        max_tokens: 700
+                    })
+                };
+
+                const myRequest = new Request(endPoint, requestOptions);
+
+                fetch(myRequest)
+                    .then(res => res.json())
+                    .then(json => {
+                        console.log(json.choices[0].message.content);
+                    })
+                .catch(err => {
+                    console.log("error");
+                });
+
+                if ()
+                document.getElementById("objection").textContent = text;
             }
         </script>
         <style>

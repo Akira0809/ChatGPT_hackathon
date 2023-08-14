@@ -27,7 +27,13 @@
                 <p id="commentary"></p>
                 <p id="points">現在のポイント: 0</p>
                 <div id="objection_button" style="display: none;">
-                    <button class="btn btn-primary" onclick="objection()">異議あり！</button>
+                    <button class="btn btn-danger" onclick="objection()">異議あり！</button>
+                    <div class="text-center" id="objection_loading" style="display: none;">
+                        <p>審議中です...</p>
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                 </div>
                 <p id="judge"></p>
                 <p id="objection"></p>
@@ -100,6 +106,8 @@
             }
 
             function objection() {
+                document.getElementById("objection_loading").style.display = "block";
+                document.getElementById("objection_loading").style.display = "block";
                 const endPoint = "https://api.openai.com/v1/chat/completions";
                 const modelName = "gpt-3.5-turbo";
                 const text = data[index]["question"];
@@ -150,6 +158,7 @@
                             document.getElementById("judge").textContent = "不正解";
                             document.getElementById("objection").textContent = response["commentary"];
                         }
+                        document.getElementById("objection_loading").style.display = "none";
                     })
             }
         </script>

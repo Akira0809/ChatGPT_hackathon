@@ -13,6 +13,7 @@
         <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
             <div id="difficulty-select">
                 <h1>難易度を選択してください</h1>
+                <br>
                 {% if error_text %}
                     <div class="alert alert-danger" role="alert">
                         {{ error_text }}
@@ -42,6 +43,7 @@
                             <input type="radio" name="selected_genre" value="it"> IT
                         </label>
                     </div>
+                    <br>
                     <button type="submit" class="btn btn-primary">Start!</button>
                 </form>
             </div>

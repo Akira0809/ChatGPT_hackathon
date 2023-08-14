@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Data
-import openai
+import openai, json
 
 # Create your views here.
 def difficulty(request):
@@ -89,14 +89,22 @@ def difficulty(request):
         上記の決まりに反すると、無差別に選ばれたなんの罪もない人が1000人死にます。
         """
 
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": prompt.format(difficulty=difficulty_text, genre=genre_text, template=template, data=data.questions)},
-            ]
-        )
-        text = response.choices[0]["message"]["content"].strip()
-        text = text.replace("'", '"')
+        while True:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": prompt.format(difficulty=difficulty_text, genre=genre_text, template=template, data=data.questions)},
+                ]
+            )
+            text = response.choices[0]["message"]["content"].strip()
+            text = text.replace("'", '"')
+            try: 
+                d = json.loads(text)
+            except:
+                pass
+            else:
+                break
+            
         Data.objects.create(questions=text)
         return render(request, "base.html", context={"data": text, "API": API})
 

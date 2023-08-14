@@ -26,11 +26,15 @@
                 <p id="result"></p>
                 <p id="commentary"></p>
                 <p id="points">現在のポイント: 0</p>
-                <button class="btn btn-primary" onclick="objection()">異議あり！</button>
+                <div id="objection_button" style="display: none;">
+                    <button class="btn btn-primary" onclick="objection()">異議あり！</button>
+                </div>
                 <p id="judge"></p>
                 <p id="objection"></p>
             </div>
-            <div class="card-footer text-body-secondary">あとでいじる</div>
+            <div class="card-footer text-body-secondary">
+                <a id="google_hints" href="https://www.google.com/search?q=">ググる</a>
+            </div>
         </div>
         <button class="btn btn-primary m-4" onclick="next()">次へ</button>
         <script>
@@ -47,6 +51,7 @@
             function hint() {
                 hint_click = true;
                 document.getElementById("hint_button").style.display = "none";
+                document.getElementById("google_hints").setAttribute("href", "https://www.google.com/search?q=" + data[index]["hints"]);
                 if (document.getElementById("question").textContent == data[index]["question"]){
                     document.getElementById("hint_text").textContent = data[index]["hints"];
                 } else {
@@ -56,6 +61,8 @@
 
             function judge(button_value) {
                 document.getElementById("judge_button").style.display = "none";
+                document.getElementById("objection_button").style.display = "block";
+                document.getElementById("google_hints").setAttribute("href", "https://www.google.com/search?q=" + data[index]["hints"]);
                 if (document.getElementById("question").textContent == data[index]["question"]){
                     if (data[index]["answer"] == button_value){
                         document.getElementById("result").textContent = "正解";
@@ -89,10 +96,6 @@
                 else {
                     window.location.href = `/result/?point=${points}`;
                 }
-            }
-
-            function hint() {
-                document.getElementById("hints").textContent = data[index]["hints"];
             }
 
             function objection() {

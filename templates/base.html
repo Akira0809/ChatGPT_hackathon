@@ -23,6 +23,7 @@
                     <button class="btn btn-primary" onclick="judge('T')">True</button>
                     <button class="btn btn-primary" onclick="judge('F')">False</button>
                 </div>
+                <p id="answer"></p>
                 <p id="result"></p>
                 <p id="commentary"></p>
                 <p id="points">現在のポイント: 0</p>
@@ -71,14 +72,11 @@
                 document.getElementById("google_hints").setAttribute("href", "https://www.google.com/search?q=" + data[index]["hints"]);
                 if (document.getElementById("question").textContent == data[index]["question"]){
                     if (data[index]["answer"] == button_value){
-                        document.getElementById("result").textContent = "正解";
-                        document.getElementById("commentary").textContent = data[index]["commentary"];
                         points += 10;
                     }
-                    else {
-                        document.getElementById("result").textContent = "不正解";
-                        document.getElementById("commentary").textContent = data[index]["commentary"];
-                    }
+                    document.getElementById("answer").textContent = button_value == 'T' ? "あなたの回答:True" : "あなたの回答:False";
+                    document.getElementById("result").textContent = data[index]["answer"] == 'T' ? "正解:True" : "正解:False";
+                    document.getElementById("commentary").textContent = data[index]["commentary"];
                     document.getElementById("points").textContent = "現在のポイント: " + points;
                 }
             }
@@ -99,6 +97,7 @@
                     document.getElementById("commentary").textContent = "";
                     document.getElementById("judge").textContent = "";
                     document.getElementById("objection").textContent = "";
+                    document.getElementById("answer").textContent = "";
                 }
                 else {
                     window.location.href = `/result/?point=${points}`;
@@ -151,11 +150,11 @@
                     .then(json => {
                         response = JSON.parse(json.choices[0].message.content);
                         if (response["judge"] == "T"){
-                            document.getElementById("judge").textContent = "正解";
+                            document.getElementById("judge").textContent = "True";
                             document.getElementById("objection").textContent = response["commentary"];
                         }
                         else {
-                            document.getElementById("judge").textContent = "不正解";
+                            document.getElementById("judge").textContent = "False";
                             document.getElementById("objection").textContent = response["commentary"];
                         }
                         document.getElementById("objection_loading").style.display = "none";

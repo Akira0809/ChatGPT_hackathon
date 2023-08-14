@@ -9,22 +9,30 @@
     <body class="main">
         {% block content %}
         {% csrf_token %}
-        <p id="question"></p>
-        <div id="hint_button">
-            <button onclick="hint()">ヒント</button>
+        <div class="card text-center">
+            <div class="card-header">
+                第<span id="question_number">1</span>問
+            </div>
+            <div class="card-body">
+                <p class="card-title" id="question"></p>
+                <div id="hint_button">
+                    <button class="btn btn-primary" onclick="hint()">ヒント</button>
+                </div>
+                <p class="card-text" id="hint_text"></p>
+                <div id="judge_button">
+                    <button class="btn btn-primary" onclick="judge('T')">True</button>
+                    <button class="btn btn-primary" onclick="judge('F')">False</button>
+                </div>
+                <p id="result"></p>
+                <p id="commentary"></p>
+                <p id="points">現在のポイント: 0</p>
+                <button class="btn btn-primary" onclick="objection()">異議あり！</button>
+                <p id="judge"></p>
+                <p id="objection"></p>
+            </div>
+            <div class="card-footer text-body-secondary">あとでいじる</div>
         </div>
-        <p id="hint_text"></p>
-        <div id="judge_button">
-            <button onclick="judge('T')">True</button>
-            <button onclick="judge('F')">False</button>
-        </div>
-        <p id="result"></p>
-        <p id="commentary"></p>
-        <p id="points">現在のポイント: 0</p>
-        <button onclick="objection()">異議あり！</button>
-        <button onclick="next()">次へ</button>
-        <p id="judge"></p>
-        <p id="objection"></p>
+        <button class="btn btn-primary m-4" onclick="next()">次へ</button>
         <script>
             var index = 0;
             var points = 0;
@@ -64,6 +72,7 @@
 
             function next() {
                 index++;
+                document.getElementById("question_number").textContent = index + 1;
                 document.getElementById("judge_button").style.display = "block";
                 if (hint_click) {
                     document.getElementById("hint_button").style.display = "block";
@@ -89,7 +98,7 @@
                 const modelName = "gpt-3.5-turbo";
                 const text = data[index]["question"];
                 const API = "{{ API }}";
-                const prompt = 
+                const prompt =
                 `
                 以下の文章が正しいか誤っているかを判定してください。
                 ${text}

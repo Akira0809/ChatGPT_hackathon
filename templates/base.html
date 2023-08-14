@@ -23,6 +23,7 @@
         <p id="points">現在のポイント: 0</p>
         <button onclick="objection()">異議あり！</button>
         <button onclick="next()">次へ</button>
+        <br>
         <p id="judge"></p>
         <p id="objection"></p>
         <script>
@@ -128,8 +129,7 @@
                 fetch(myRequest)
                     .then(res => res.json())
                     .then(json => {
-                        response = json.parse(json.choices[0].message.content);
-                        console.log(response.judge);
+                        response = JSON.parse(json.choices[0].message.content);
                         if (response["judge"] == "T"){
                             document.getElementById("judge").textContent = "正解";
                             document.getElementById("objection").textContent = response["commentary"];

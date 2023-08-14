@@ -12,13 +12,7 @@
         {% block content %}
         <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
             <div id="difficulty-select">
-                <h1>難易度を選択してください</h1>
-                <br>
-                {% if error_text %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ error_text }}
-                    </div>
-                {% endif %}
+                <h1 class="m-3">難易度を選択してください</h1>
                 <form method="POST" id="loading-form">
                     {% csrf_token %}
                     <div class="form-check">
@@ -32,6 +26,7 @@
                             <input type="radio" name="selected_difficulty" value="society"> 社会人
                         </label>
                     </div>
+                    <h3 class="m-3">ジャンルを選択してください</h3>
                     <div class="form-check">
                         <label class="mr-3">
                             <input type="radio" name="selected_genre" value="miscellaneous"> 雑学
@@ -44,6 +39,11 @@
                         </label>
                     </div>
                     <br>
+                    {% if error_text %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error_text }}
+                    </div>
+                    {% endif %}
                     <button type="submit" class="btn btn-primary">Start!</button>
                 </form>
             </div>
@@ -58,6 +58,8 @@
                     <div class="box five"></div>
                     <div class="box six"></div>
                 </div>
+                <h4>豆知識</h4>
+                <p>きゅうりは熟すと黄色になるぞ！</p>
             </div>
         </div>
         <!-- フォームが送信されたときにローディングスピナーを表示するためのJavaScript -->

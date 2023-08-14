@@ -11,7 +11,9 @@
         {% csrf_token %}
         <div class="card text-center">
             <div class="card-header">
-                第<span id="question_number">1</span>問
+                <h1>
+                    第<span id="question_number">1</span>問
+                </h1>
             </div>
             <div class="card-body">
                 <p class="card-title" id="question"></p>
@@ -24,11 +26,19 @@
                     <button class="btn btn-primary" onclick="judge('F')">False</button>
                 </div>
                 <p id="answer"></p>
-                <p id="result"></p>
+                <h3 id="result"></h3>
                 <p id="commentary"></p>
                 <p id="points">現在のポイント: 0</p>
-                <div id="objection_button" style="display: none;">
-                    <button class="btn btn-primary" onclick="objection()">異議あり！</button>
+                <div id="objection_button">
+                    <div id="objection_action" style="display: none;">
+                        <button class="btn btn-danger" onclick="objection()">異議あり！</button>
+                    </div>
+                    <div class="text-center" id="objection_loading" style="display: none;">
+                        <p>審議中です...</p>
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                 </div>
                 <p id="final_answer"></p>
                 <p id="judge"></p>
@@ -39,7 +49,9 @@
                 <a id="google_hints" href="https://www.google.com/search?q=" class="btn btn-primary" target="_blank">ググる</a>
             </div>
         </div>
-        <button class="btn btn-primary m-4" onclick="next()">次へ</button>
+        <div id="next_button" style="display: none;">
+            <button class="btn btn-primary m-4" onclick="next()">次へ</button>
+        </div>
         <script>
             var index = 0;
             var points = 0;
@@ -66,7 +78,8 @@
             function judge(button_value) {
                 button_value = button_value;
                 document.getElementById("judge_button").style.display = "none";
-                document.getElementById("objection_button").style.display = "block";
+                document.getElementById("objection_action").style.display = "block";
+                document.getElementById("next_button").style.display = "block";
                 document.getElementById("google_hints").setAttribute("href", "https://www.google.com/search?q=" + data[index]["hints"]);
                 if (document.getElementById("question").textContent == data[index]["question"]){
                     if (data[index]["answer"] == button_value){
@@ -83,7 +96,9 @@
                 index++;
                 document.getElementById("question_number").textContent = index + 1;
                 document.getElementById("judge_button").style.display = "block";
-                document.getElementById("objection_button").style.display = "none";
+                document.getElementById("objection_action").style.display = "none";
+                document.getElementById("next_button").style.display = "none";
+                document.getElementById("google_hints").setAttribute("href", "https://www.google.com/search?q=");
                 if (hint_click) {
                     document.getElementById("hint_button").style.display = "block";
                     document.getElementById("hint_text").textContent = "";
@@ -105,6 +120,10 @@
             }
 
             function objection() {
+                document.getElementById("objection_action").style.display = "none";
+                document.getElementById("objection_loading").style.display = "block";
+                // Loading中に次へ進むのを防ぐため
+                document.getElementById("next_button").style.display = "none";
                 const endPoint = "https://api.openai.com/v1/chat/completions";
                 const modelName = "gpt-3.5-turbo";
                 const text = data[index]["question"];

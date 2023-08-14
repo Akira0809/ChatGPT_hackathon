@@ -11,6 +11,8 @@
         <button onclick="judge('T')">True</button>
         <button onclick="judge('F')">False</button>
         <br>
+        <button onclick="hint()">ヒント</button>
+        <p id="hints"></p>
         <p id="result"></p>
         <p id="commentary"></p>
         <p id="points">現在のポイント: 0</p>
@@ -45,10 +47,15 @@
                     document.getElementById("question").textContent = data[index]["question"];
                     document.getElementById("result").textContent = "";
                     document.getElementById("commentary").textContent = "";
+                    document.getElementById("hints").textContent = "";
                 }
                 else {
                     window.location.href = `/result/?point=${points}`;
                 }
+            }
+
+            function hint() {
+                document.getElementById("hints").textContent = data[index]["hints"];
             }
         </script>
         <style>

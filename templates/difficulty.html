@@ -4,10 +4,8 @@
     <head>
         <meta charset="UTF-8">
         <title>難易度選択画面</title>
-        <!-- BootstrapのCSSを読み込む -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <!-- BootstrapのJSを読み込む（一部の機能に必要） -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-o+RDsa0aVBWp2XA4/JfbcNhG+6U799ZhdMh4AjN4lSkqE0sAg5J24nXpw2tK2K2n" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
         <link href="{% static 'css/style.css' %}" rel="stylesheet">
     </head>
     <body class="main">
@@ -15,9 +13,14 @@
         <div class="d-flex justify-content-center align-items-center">
             <div id="difficulty-select">
                 <h1>難易度を選択してください</h1>
+                {% if error_text %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error_text }}
+                    </div>
+                {% endif %}
                 <form method="POST" id="loading-form">
                     {% csrf_token %}
-                    <div class="form-group">
+                    <div class="form-check">
                         <label class="mr-3">
                             <input type="radio" name="selected_difficulty" value="elementary_school"> 小学生
                         </label>
@@ -28,7 +31,7 @@
                             <input type="radio" name="selected_difficulty" value="society"> 社会人
                         </label>
                     </div>
-                    <div class="form-group">
+                    <div class="form-check">
                         <label class="mr-3">
                             <input type="radio" name="selected_genre" value="miscellaneous"> 雑学
                         </label>
@@ -39,9 +42,6 @@
                             <input type="radio" name="selected_genre" value="it"> IT
                         </label>
                     </div>
-                    {% if error_text %}
-                        <p>{{ error_text }}</p>
-                    {% endif %}
                     <button type="submit" class="btn btn-primary">Start!</button>
                 </form>
             </div>

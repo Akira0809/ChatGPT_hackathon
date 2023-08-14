@@ -30,8 +30,10 @@
                 <div id="objection_button" style="display: none;">
                     <button class="btn btn-primary" onclick="objection()">異議あり！</button>
                 </div>
+                <p id="final_answer"></p>
                 <p id="judge"></p>
                 <p id="objection"></p>
+                <p id="final_commentary"></p>
             </div>
             <div class="card-footer text-body-secondary">
                 <a id="google_hints" href="https://www.google.com/search?q=" class="btn btn-primary" target="_blank">ググる</a>
@@ -41,6 +43,7 @@
         <script>
             var index = 0;
             var points = 0;
+            var button_value;
             // hintボタンを押さなくても発生してしまう無駄な処理を防ぐため
             var hint_click = false;
             const data = JSON.parse("{{ data|escapejs }}");
@@ -61,6 +64,7 @@
             }
 
             function judge(button_value) {
+                button_value = button_value;
                 document.getElementById("judge_button").style.display = "none";
                 document.getElementById("objection_button").style.display = "block";
                 document.getElementById("google_hints").setAttribute("href", "https://www.google.com/search?q=" + data[index]["hints"]);
@@ -92,6 +96,8 @@
                     document.getElementById("judge").textContent = "";
                     document.getElementById("objection").textContent = "";
                     document.getElementById("answer").textContent = "";
+                    document.getElementById("final_answer").textContent = "";
+                    document.getElementById("final_commentary").textContent = "";
                 }
                 else {
                     window.location.href = `/result/?point=${points}`;
@@ -141,14 +147,12 @@
                     .then(res => res.json())
                     .then(json => {
                         response = JSON.parse(json.choices[0].message.content);
-                        if (response["judge"] == "T"){
-                            document.getElementById("judge").textContent = "True";
-                            document.getElementById("objection").textContent = response["commentary"];
-                        }
-                        else {
-                            document.getElementById("judge").textContent = "False";
-                            document.getElementById("objection").textContent = response["commentary"];
-                        }
+                        document.getElementById("judge").textContent = response["judge"] == 'T' ? "判定:True" : "判定:False";
+                        document.getElementById("objection").textContent = response["commentary"];
+                        document.getElementById("final_answer").textContent = data[index]["final_answer"] == 'T' ? "本当の正解:True" : "本当の正解:False";
+                        document.getElementById("final_commentary").textContent = data[index]["true_commentary"];
+                        points += button_value == data[index]["final_answer"] ? 50 : -points;
+                        document.getElementById("points").textContent = "現在のポイント: " + points;
                     })
             }
         </script>

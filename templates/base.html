@@ -173,8 +173,11 @@
                         if (data[index]["final_answer"] == 'T'){
                             document.getElementById("final_answer").textContent = data[index]["answer"] == 'T' ? "本当の正解:False" : "本当の正解:True";
                         }
+                        else {
+                            document.getElementById("final_answer").textContent = data[index]["answer"];
+                        }
                         document.getElementById("final_commentary").textContent = data[index]["true_commentary"];
-                        points += button_value != data[index]["final_answer"] ? 50 : -points;
+                        points += button_value == data[index]["final_answer"] ? 50 : -points;
                         document.getElementById("points").textContent = "現在のポイント: " + points;
                     })
             }

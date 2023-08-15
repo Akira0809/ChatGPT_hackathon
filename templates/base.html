@@ -166,6 +166,8 @@
                     .then(res => res.json())
                     .then(json => {
                         response = JSON.parse(json.choices[0].message.content);
+                        document.getElementById("next_button").style.display = "block";
+                        document.getElementById("objection_loading").style.display = "none";
                         document.getElementById("judge").textContent = response["judge"] == 'T' ? "判定:True" : "判定:False";
                         document.getElementById("objection").textContent = response["commentary"];
                         document.getElementById("final_answer").textContent = data[index]["final_answer"] == 'T' ? "本当の正解:False" : "本当の正解:True";

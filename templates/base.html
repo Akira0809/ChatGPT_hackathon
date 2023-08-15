@@ -170,9 +170,11 @@
                         document.getElementById("objection_loading").style.display = "none";
                         document.getElementById("judge").textContent = response["judge"] == 'T' ? "判定:True" : "判定:False";
                         document.getElementById("objection").textContent = response["commentary"];
-                        document.getElementById("final_answer").textContent = data[index]["final_answer"] == 'T' ? "本当の正解:False" : "本当の正解:True";
+                        if (data[index]["final_answer"] == 'T'){
+                            document.getElementById("final_answer").textContent = data[index]["answer"] == 'T' ? "本当の正解:False" : "本当の正解:True";
+                        }
                         document.getElementById("final_commentary").textContent = data[index]["true_commentary"];
-                        points += button_value == data[index]["final_answer"] ? 50 : -points;
+                        points += button_value != data[index]["final_answer"] ? 50 : -points;
                         document.getElementById("points").textContent = "現在のポイント: " + points;
                     })
             }

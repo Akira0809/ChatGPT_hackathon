@@ -58,8 +58,8 @@
             var button_value;
             // hintボタンを押さなくても発生してしまう無駄な処理を防ぐため
             var hint_click = false;
-            const data = JSON.parse("{{ data|escapejs }}");     
-            console.log(data);
+            const data = JSON.parse("{{ data|escapejs }}");
+
             window.onload = function setup() {
                 document.getElementById("question").textContent = data[index]["question"];
             }
@@ -119,61 +119,61 @@
                 }
             }
 
-            // function objection() {
-            //     document.getElementById("objection_action").style.display = "none";
-            //     document.getElementById("objection_loading").style.display = "block";
-            //     // Loading中に次へ進むのを防ぐため
-            //     document.getElementById("next_button").style.display = "none";
-            //     const endPoint = "https://api.openai.com/v1/chat/completions";
-            //     const modelName = "gpt-3.5-turbo";
-            //     const text = data[index]["question"];
-            //     const API = "{{ API }}";
-            //     let response;
-            //     const prompt =
-            //     `
-            //     以下の文章が正しいか誤っているかを判定してください。
-            //     ${text}
-            //     判定は正しいときはT、誤っているときはFと出力してください。
-            //     また、その理由もJson形式で出力してください。
+            function objection() {
+                document.getElementById("objection_action").style.display = "none";
+                document.getElementById("objection_loading").style.display = "block";
+                // Loading中に次へ進むのを防ぐため
+                document.getElementById("next_button").style.display = "none";
+                const endPoint = "https://api.openai.com/v1/chat/completions";
+                const modelName = "gpt-3.5-turbo";
+                const text = data[index]["question"];
+                const API = "{{ API }}";
+                let response;
+                const prompt =
+                `
+                以下の文章が正しいか誤っているかを判定してください。
+                ${text}
+                判定は正しいときはT、誤っているときはFと出力してください。
+                また、その理由もJson形式で出力してください。
 
-            //     出力例
-            //     {
-            //         "judge": "正誤を表す英文字",
-            //         "commentary": "解説"
-            //     }
-            //     `;
+                出力例
+                {
+                    "judge": "正誤を表す英文字",
+                    "commentary": "解説"
+                }
+                `;
 
-            //     const messages=[
-            //         {"role": "user", "content": prompt},
-            //     ];
+                const messages=[
+                    {"role": "user", "content": prompt},
+                ];
 
-            //     const requestOptions = {
-            //         method: "POST",
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //             Authorization: `Bearer ${API}`
-            //         },
-            //         body: JSON.stringify({
-            //             model: modelName,
-            //             messages: messages,
-            //             max_tokens: 700
-            //         })
-            //     };
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${API}`
+                    },
+                    body: JSON.stringify({
+                        model: modelName,
+                        messages: messages,
+                        max_tokens: 700
+                    })
+                };
 
-            //     const myRequest = new Request(endPoint, requestOptions);
+                const myRequest = new Request(endPoint, requestOptions);
 
-            //     fetch(myRequest)
-            //         .then(res => res.json())
-            //         .then(json => {
-            //             response = JSON.parse(json.choices[0].message.content);
-            //             document.getElementById("judge").textContent = response["judge"] == 'T' ? "判定:True" : "判定:False";
-            //             document.getElementById("objection").textContent = response["commentary"];
-            //             document.getElementById("final_answer").textContent = data[index]["final_answer"] == 'T' ? "本当の正解:True" : "本当の正解:False";
-            //             document.getElementById("final_commentary").textContent = data[index]["true_commentary"];
-            //             points += button_value == data[index]["final_answer"] ? 50 : -points;
-            //             document.getElementById("points").textContent = "現在のポイント: " + points;
-            //         })
-            // }
+                fetch(myRequest)
+                    .then(res => res.json())
+                    .then(json => {
+                        response = JSON.parse(json.choices[0].message.content);
+                        document.getElementById("judge").textContent = response["judge"] == 'T' ? "判定:True" : "判定:False";
+                        document.getElementById("objection").textContent = response["commentary"];
+                        document.getElementById("final_answer").textContent = data[index]["final_answer"] == 'T' ? "本当の正解:True" : "本当の正解:False";
+                        document.getElementById("final_commentary").textContent = data[index]["true_commentary"];
+                        points += button_value == data[index]["final_answer"] ? 50 : -points;
+                        document.getElementById("points").textContent = "現在のポイント: " + points;
+                    })
+            }
         </script>
         <style>
             .main {

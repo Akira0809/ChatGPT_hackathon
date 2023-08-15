@@ -168,7 +168,7 @@
                         response = JSON.parse(json.choices[0].message.content);
                         document.getElementById("next_button").style.display = "block";
                         document.getElementById("objection_loading").style.display = "none";
-                        document.getElementById("judge").textContent = response["judge"] == 'T' ? "異議却下" : "異議承認";
+                        document.getElementById("judge").textContent = response["judge"] == data[index]["answer"] ? "異議却下" : "異議承認";
                         document.getElementById("objection").textContent = response["commentary"];
                         if (data[index]["final_answer"] == 'T'){
                             document.getElementById("final_answer").textContent = data[index]["answer"] == 'T' ? "本当の正解:False" : "本当の正解:True";

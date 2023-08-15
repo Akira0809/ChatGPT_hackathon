@@ -168,13 +168,13 @@
                         response = JSON.parse(json.choices[0].message.content);
                         document.getElementById("next_button").style.display = "block";
                         document.getElementById("objection_loading").style.display = "none";
-                        document.getElementById("judge").textContent = response["judge"] == 'T' ? "判定:True" : "判定:False";
+                        document.getElementById("judge").textContent = response["judge"] == 'T' ? "異議却下" : "異議承認";
                         document.getElementById("objection").textContent = response["commentary"];
                         if (data[index]["final_answer"] == 'T'){
                             document.getElementById("final_answer").textContent = data[index]["answer"] == 'T' ? "本当の正解:False" : "本当の正解:True";
                         }
                         else {
-                            document.getElementById("final_answer").textContent = data[index]["answer"];
+                            document.getElementById("final_answer").textContent = data[index]["answer"] == 'T' ? "本当の正解:True" : "本当の正解:False";
                         }
                         document.getElementById("final_commentary").textContent = data[index]["true_commentary"];
                         points += button_value == data[index]["final_answer"] ? 50 : -points;

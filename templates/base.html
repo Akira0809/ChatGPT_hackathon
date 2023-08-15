@@ -172,7 +172,7 @@
                         document.getElementById("objection").textContent = response["commentary"];
                         document.getElementById("final_answer").textContent = data[index]["final_answer"] == 'T' ? "本当の正解:False" : "本当の正解:True";
                         document.getElementById("final_commentary").textContent = data[index]["true_commentary"];
-                        points += button_value == data[index]["final_answer"] ? -points : 50;
+                        points += button_value == data[index]["final_answer"] ? 50 : -points;
                         document.getElementById("points").textContent = "現在のポイント: " + points;
                     })
             }

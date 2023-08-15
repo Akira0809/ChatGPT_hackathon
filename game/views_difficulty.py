@@ -28,49 +28,6 @@ def difficulty(request):
 
         #data = Data.objects.latest("id")
 
-        data = [
-            {
-                "question": "犬はネコと同じくらいの知能を持っていますか？", 
-                "answer": "F", 
-                "hints": ["トリック訓練", "忠誠心", "社会性"], 
-                "commentary": "犬はネコと同じくらいの知能を持っていません。ただし、トリック訓練においては高い知能を発揮し、忠誠心や社会性も備えています。", 
-                "final_answer": "T", 
-                "true_commentary": "犬はネコと同じくらいの知能を持っています。犬種によって知能の差はありますが、一部の犬はネコ以上の知能を持っていると言われています。また、トリック訓練だけでなく、問題解決能力や学習能力も高く、忠誠心や社会性も備えています。"
-            },
-            {
-                "question": "マグロは鰹と同じ種類の魚ですか？", 
-                "answer": "T", 
-                "hints": ["観賞魚", "食用", "生息地"], 
-                "commentary": "マグロは鰹と同じ種類の魚です。両方とも観賞魚としても人気がありますが、主に食用として広く利用されており、生息地も一部重なっています。", 
-                "final_answer": "F", 
-                "true_commentary": "この文章に誤りはありません"
-            },
-            {
-                "question": "レモンは酸味を持っていますか？", 
-                "answer": "T", 
-                "hints": ["ビタミンC", "柑橘系", "飲み物"], 
-                "commentary": "レモンは酸味を持っています。レモンには多量のビタミンCが含まれており、柑橘系の果物としてその酸味が特徴です。そのため、レモンを使った飲み物などもよく作られます。", 
-                "final_answer": "F", 
-                "true_commentary": "この文章に誤りはありません"
-            },
-            {
-                "question": "ニューヨークはアメリカの首都ですか？", 
-                "answer": "F", 
-                "hints": ["ビッグアップル", "金融センター", "自由の女神"], 
-                "commentary": "ニューヨークはアメリカの首都ではありません。ニューヨークはアメリカのビッグアップルとして知られ、金融センターや観光名所の自由の女神などがありますが、首都ではありません。", 
-                "final_answer": "T", 
-                "true_commentary": "ニューヨークはアメリカの首都ではありません。アメリカの首都はワシントンD.C.です。ニューヨークはアメリカでもっとも人口が多く、国際的な金融センターとして知られています。また、観光名所や文化施設も多く、世界中から多くの人々が訪れることでも有名です。"
-            },
-            {
-                "question": "太陽は地球の周りを公転していますか？", 
-                "answer": "F", 
-                "hints": ["自転", "一日24時間", "日の出日の入り"], 
-                "commentary": "太陽は地球の周りを公転していません。太陽は自転しており、その自転によって一日24時間が生じ、地球上で日の出や日の入りが行われています。", 
-                "final_answer": "T", 
-                "true_commentary": "太陽は地球の周りを公転しています。地球が太陽の周りを約365日かけて一周することによって、一年が生じます。また、太陽が地球を中心として公転することで、地球上で季節が生まれるのです。"
-            }
-        ]
-
         with open("../api.text") as f:
             openai.api_key = f.read().strip()
 
@@ -140,8 +97,6 @@ def difficulty(request):
         ・出力するjsonの合計文字数は800文字までに抑えること。また、出力を途中で途切れさせてはならない。
         ・生成した文章はjson形式で出力する。それぞれの文章の出力の例は以下に示すとおりである。以下の通りにフォーマットを整え、jsonで出力すること。出力はプログラムで使用するため、下記に指定するフォーマットの形式以外だとエラーの原因となる。
         {template}
-        ・以下のjsonは直近で出力した内容である。これに類似したものは出力してはならない。
-        {data}
         ・出力を行う前に、jsonの内容を確認する。文章、本当か嘘かを表す英文字、3つのワード、解説、文章を書き換えたかを表す英文字、本当の解説のうち、いずれかが欠けていた場合はとても重い罰が下る。特にワードの数が3つぴったりであることは重大である
         上記の決まりに反すると、無差別に選ばれたなんの罪もない人が1000人死にます。
         """
@@ -150,14 +105,13 @@ def difficulty(request):
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "user", "content": prompt.format(difficulty=difficulty_text, genre=genre_text, template=template, data=data)},
+                    {"role": "user", "content": prompt.format(difficulty=difficulty_text, genre=genre_text, template=template)},
                 ],
                 temperature=0.1,
-                max_tokens=1000
             )
             text = response.choices[0]["message"]["content"].strip()
             text = text.replace("'", '"')
-            try: 
+            try:
                 d = json.loads(text)
             except:
                 pass
